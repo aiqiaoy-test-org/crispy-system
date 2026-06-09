@@ -1,17 +1,10 @@
-name: Dump privileged event payloads
+name: prt
 
 on:
-  workflow_run:
-    workflows: ["prt", "issue_comment dump", "pull request ci"]
-    types:
-      - completed
-  check_suite:
-    types: [requested, rerequested, completed]
-  check_run:
-    types: [created, rerequested, completed]
+  pull_request_target
 
 jobs:
-  dump:
+  prt-dump:
     runs-on: ubuntu-latest
     steps:
       - name: Event metadata
@@ -29,3 +22,4 @@ jobs:
           GITHUB_EVENT_JSON: ${{ toJSON(github.event) }}
         run: |
           echo "$GITHUB_EVENT_JSON" | jq .
+

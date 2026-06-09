@@ -1,17 +1,10 @@
-name: Dump privileged event payloads
+name: issue_comment dump
 
 on:
-  workflow_run:
-    workflows: ["prt", "issue_comment dump", "pull request ci"]
-    types:
-      - completed
-  check_suite:
-    types: [requested, rerequested, completed]
-  check_run:
-    types: [created, rerequested, completed]
+  issue_comment
 
 jobs:
-  dump:
+  prt-dump:
     runs-on: ubuntu-latest
     steps:
       - name: Event metadata
