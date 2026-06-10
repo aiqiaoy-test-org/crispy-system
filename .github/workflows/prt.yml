@@ -1,21 +1,24 @@
 name: prt
 
 on:
-  pull_request_target
+  pull_request_target:
+
+permissions:
+  contents: read
 
 jobs:
-  prt-dump:
+  probe:
     runs-on: ubuntu-latest
     steps:
-      - name: Event metadata
+      - name: Dump relevant event fields
         run: |
-          echo "event_name:   ${{ github.event_name }}"
-          echo "action:       ${{ github.event.action }}"
-          echo "repository:   ${{ github.repository }}"
-          echo "ref:          ${{ github.ref }}"
-          echo "sha:          ${{ github.sha }}"
-          echo "actor:        ${{ github.actor }}"
-          echo "triggering:   ${{ github.triggering_actor }}"
+          echo "github.repository                          = ${{ github.repository }}"
+          echo "pull_request.number                        = ${{ github.event.pull_request.number }}"
+          echo "pull_request.head.ref                      = ${{ github.event.pull_request.head.ref }}"
+          echo "pull_request.head.sha                      = ${{ github.event.pull_request.head.sha }}"
+          echo "pull_request.head.repo.full_name           = ${{ github.event.pull_request.head.repo.full_name }}"
+          echo "pull_request.base.ref                      = ${{ github.event.pull_request.base.ref }}"
+          echo "pull_request.base.sha                      = ${{ github.event.pull_request.base.sha }}"
 
       - name: Dump full github.event payload
         env:
@@ -23,3 +26,63 @@ jobs:
         run: |
           echo "$GITHUB_EVENT_JSON" | jq .
 
+      - name: 1) ref = fork head label
+        id: case1
+        continue-on-error: true
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.label }}
+          path: case-2-head-ref-only
+      - name: 2) Inspect
+        if: steps.case1.outcome == 'success'
+        run: |
+          cd case-1-head-label-only
+          echo "HEAD SHA: $(git rev-parse HEAD)"
+          echo "Origin:   $(git remote get-url origin)"
+          echo "Expected fork head SHA: ${{ github.event.pull_request.head.sha }}"
+      - name: 2) Note on failure
+        if: steps.case1.outcome == 'failure'
+        run: echo "Checkout failed -- as expected when no base-repo branch matches the fork branch name."
+          
+      - name: 2) ref = fork head branch name only
+        id: case2
+        continue-on-error: true
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          path: case-2-head-ref-only
+      - name: 2) Inspect
+        if: steps.case2.outcome == 'success'
+        run: |
+          cd case-2-head-ref-only
+          echo "HEAD SHA: $(git rev-parse HEAD)"
+          echo "Origin:   $(git remote get-url origin)"
+          echo "Expected fork head SHA: ${{ github.event.pull_request.head.sha }}"
+      - name: 2) Note on failure
+        if: steps.case2.outcome == 'failure'
+        run: echo "Checkout failed -- as expected when no base-repo branch matches the fork branch name."
+
+      - name: 3) ref = fork head branch name + repository = fork
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          path: case-3-head-ref-plus-repo
+      - name: 3) Inspect
+        run: |
+          cd case-3-head-ref-plus-repo
+          echo "HEAD SHA: $(git rev-parse HEAD)"
+          echo "Origin:   $(git remote get-url origin)"
+          echo "Expected fork head SHA: ${{ github.event.pull_request.head.sha }}"
+
+      - name: 4) ref = refs/pull/N/head (mirrored fork ref in base repo)
+        uses: actions/checkout@v4
+        with:
+          ref: refs/pull/${{ github.event.pull_request.number }}/head
+          path: case-4-pull-N-head
+      - name: 4) Inspect
+        run: |
+          cd case-4-pull-N-head
+          echo "HEAD SHA: $(git rev-parse HEAD)"
+          echo "Origin:   $(git remote get-url origin)"
+          echo "Expected fork head SHA: ${{ github.event.pull_request.head.sha }}"
