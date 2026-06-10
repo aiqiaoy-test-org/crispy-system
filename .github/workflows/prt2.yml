@@ -1,0 +1,25 @@
+name: prt 2
+
+on:
+  pull_request_target:
+
+permissions:
+  contents: read
+
+jobs:
+  dump:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dump github context
+        env:
+          GITHUB_CONTEXT: ${{ toJSON(github) }}
+        run: |
+          echo "===== github context ====="
+          echo "$GITHUB_CONTEXT"
+
+      - name: Dump github.event payload
+        env:
+          EVENT_CONTEXT: ${{ toJSON(github.event) }}
+        run: |
+          echo "===== github.event ====="
+          echo "$EVENT_CONTEXT"
