@@ -25,6 +25,24 @@ jobs:
           GITHUB_EVENT_JSON: ${{ toJSON(github.event) }}
         run: |
           echo "$GITHUB_EVENT_JSON" | jq .
+
+      - name: 1) ref = fork head label
+        id: case1
+        continue-on-error: true
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.label }}
+          path: case-2-head-ref-only
+      - name: 2) Inspect
+        if: steps.case1.outcome == 'success'
+        run: |
+          cd case-1-head-label-only
+          echo "HEAD SHA: $(git rev-parse HEAD)"
+          echo "Origin:   $(git remote get-url origin)"
+          echo "Expected fork head SHA: ${{ github.event.pull_request.head.sha }}"
+      - name: 2) Note on failure
+        if: steps.case1.outcome == 'failure'
+        run: echo "Checkout failed -- as expected when no base-repo branch matches the fork branch name."
           
       - name: 2) ref = fork head branch name only
         id: case2
