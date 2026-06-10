@@ -17,9 +17,12 @@ jobs:
           echo "===== github context ====="
           echo "$GITHUB_CONTEXT"
 
-      - name: Dump github.event payload
-        env:
-          EVENT_CONTEXT: ${{ toJSON(github.event) }}
+      - name: Dump repository IDs
         run: |
-          echo "===== github.event ====="
-          echo "$EVENT_CONTEXT"
+          echo "github.repository           = ${{ github.repository }}"
+          echo "github.repository.id        = ${{ github.repository.id }}"
+          echo "github.repository_id        = ${{ github.repository_id }}"
+          echo "github.repository_owner     = ${{ github.repository_owner }}"
+          echo "github.repository_owner_id  = ${{ github.repository_owner_id }}"
+          echo "github.event.repository.id  = ${{ github.event.repository.id }}"
+
