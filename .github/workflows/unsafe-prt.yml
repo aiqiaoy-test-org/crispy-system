@@ -7,7 +7,7 @@ permissions:
   contents: read
 
 jobs:
-  ref-input:
+  ref-input-sha:
     runs-on: ubuntu-latest
     steps:
       - name: Dump full github.event payload
@@ -21,7 +21,7 @@ jobs:
         continue-on-error: true
         uses: actions/checkout@b8447332b0339613f1faeb543152b81046bc41f4
         with:
-          ref: ${{ github.event.pull_request.head.ref }}
+          ref: ${{ github.event.pull_request.head.sha }}
           
   repo-input:
     runs-on: ubuntu-latest
