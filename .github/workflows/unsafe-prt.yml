@@ -1,0 +1,41 @@
+name: unsafe (expected to fail)
+
+on:
+  pull_request_target:
+
+permissions:
+  contents: read
+
+jobs:
+  ref-input:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dump full github.event payload
+        env:
+          GITHUB_EVENT_JSON: ${{ toJSON(github.event) }}
+        run: |
+          echo "$GITHUB_EVENT_JSON" | jq .
+
+      - name: ref = fork head ref
+        id: case1
+        continue-on-error: true
+        uses: actions/checkout@b8447332b0339613f1faeb543152b81046bc41f4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          
+  repo-input:
+    runs-on: ubuntu-latest
+    steps:
+      - name: ref = fork head branch name + repository = fork
+        uses: actions/checkout@b8447332b0339613f1faeb543152b81046bc41f4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+
+  refs-pull:
+    runs-on: ubuntu-latest
+    steps:
+      - name: ref = refs/pull/N/head (mirrored fork ref in base repo)
+        uses: actions/checkout@b8447332b0339613f1faeb543152b81046bc41f4
+        with:
+          ref: refs/pull/${{ github.event.pull_request.number }}/head
