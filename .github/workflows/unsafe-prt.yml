@@ -19,14 +19,14 @@ jobs:
       - name: ref = fork head ref
         id: case1
         continue-on-error: true
-        uses: actions/checkout@enforce-safe-checkout
+        uses: actions/checkout@cb140b4908d6f8745205667913eadda5043605a4
           ref: ${{ github.event.pull_request.head.sha }}
           
   repo-input:
     runs-on: ubuntu-latest
     steps:
       - name: ref = fork head branch name + repository = fork
-        uses: actions/checkout@enforce-safe-checkout
+        uses: actions/checkout@cb140b4908d6f8745205667913eadda5043605a4
         with:
           ref: ${{ github.event.pull_request.head.ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
@@ -35,6 +35,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: ref = refs/pull/N/head (mirrored fork ref in base repo)
-        uses: actions/checkout@enforce-safe-checkout
+        uses: actions/checkout@cb140b4908d6f8745205667913eadda5043605a4
         with:
           ref: refs/pull/${{ github.event.pull_request.number }}/head
