@@ -29,7 +29,7 @@ jobs:
       - name: 1) ref = fork head label
         id: case1
         continue-on-error: true
-        uses: actions/checkout@v4
+        uses: actions/checkout@b8447332b0339613f1faeb543152b81046bc41f4
         with:
           ref: ${{ github.event.pull_request.head.label }}
           path: case-2-head-ref-only
@@ -47,7 +47,7 @@ jobs:
       - name: 2) ref = fork head branch name only
         id: case2
         continue-on-error: true
-        uses: actions/checkout@v4
+        uses: actions/checkout@b8447332b0339613f1faeb543152b81046bc41f4
         with:
           ref: ${{ github.event.pull_request.head.ref }}
           path: case-2-head-ref-only
@@ -63,7 +63,7 @@ jobs:
         run: echo "Checkout failed -- as expected when no base-repo branch matches the fork branch name."
 
       - name: 3) ref = fork head branch name + repository = fork
-        uses: actions/checkout@v4
+        uses: actions/checkout@b8447332b0339613f1faeb543152b81046bc41f4
         with:
           ref: ${{ github.event.pull_request.head.ref }}
           repository: ${{ github.event.pull_request.head.repo.id }}
@@ -76,7 +76,7 @@ jobs:
           echo "Expected fork head SHA: ${{ github.event.pull_request.head.sha }}"
 
       - name: 4) ref = refs/pull/N/head (mirrored fork ref in base repo)
-        uses: actions/checkout@v4
+        uses: actions/checkout@b8447332b0339613f1faeb543152b81046bc41f4
         with:
           ref: refs/pull/${{ github.event.pull_request.number }}/head
           path: case-4-pull-N-head
