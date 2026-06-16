@@ -8,7 +8,7 @@ permissions:
 
 jobs:
   run-from-pr-event:
-    uses: ./.github/workflows/reusable-pr-checkout-called.yml
+    uses: ./.github/workflows/called-prt-test.yml
     with:
       branchName: refs/pull/${{ github.event.pull_request.number }}/merge
       pullRequestJSON: ${{ toJSON(github.event.pull_request) }}
