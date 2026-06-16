@@ -1,0 +1,14 @@
+name: reusable caller prt
+
+on:
+  pull_request_target:
+
+permissions:
+  contents: read
+
+jobs:
+  run-from-pr-event:
+    uses: ./.github/workflows/reusable-pr-checkout-called.yml
+    with:
+      branchName: refs/pull/${{ github.event.pull_request.number }}/merge
+      pullRequestJSON: ${{ toJSON(github.event.pull_request) }}
