@@ -31,13 +31,13 @@ jobs:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.sha }}
       - name: checkout opt-in
-        uses: actions/checkout@c57f932d5d44badedba05cf774dcb808347f6944
+        uses: actions/checkout@main
         with:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.sha }}
           allow-unsafe-pr-checkout: true
       - name: expected to fail
-        uses: actions/checkout@c57f932d5d44badedba05cf774dcb808347f6944
+        uses: actions/checkout@main
         with:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.sha }}
@@ -51,13 +51,13 @@ jobs:
           ref: ${{ github.event.pull_request.head.ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
       - name: checkout opt-in
-        uses: actions/checkout@c57f932d5d44badedba05cf774dcb808347f6944
+        uses: actions/checkout@main
         with:
           ref: ${{ github.event.pull_request.head.ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           allow-unsafe-pr-checkout: true
       - name: expected to fail
-        uses: actions/checkout@c57f932d5d44badedba05cf774dcb808347f6944
+        uses: actions/checkout@main
         with:
           ref: ${{ github.event.pull_request.head.ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
@@ -70,12 +70,12 @@ jobs:
         with:
           ref: ${{ inputs.branchName }}
       - name: checkout opt-in
-        uses: actions/checkout@c57f932d5d44badedba05cf774dcb808347f6944
+        uses: actions/checkout@main
         with:
           ref: ${{ inputs.branchName }}
           allow-unsafe-pr-checkout: true
       - name: expected to fail
-        uses: actions/checkout@c57f932d5d44badedba05cf774dcb808347f6944
+        uses: actions/checkout@main
         with:
           ref: ${{ inputs.branchName }}
 
@@ -88,13 +88,13 @@ jobs:
           persist-credentials: false
           ref: ${{ fromJSON(inputs.pullRequestJSON).merge_commit_sha }}
       - name: checkout opt-in
-        uses: actions/checkout@c57f932d5d44badedba05cf774dcb808347f6944
+        uses: actions/checkout@main
         with:
           persist-credentials: false
           ref: ${{ fromJSON(inputs.pullRequestJSON).merge_commit_sha }}
           allow-unsafe-pr-checkout: true
       - name: expected to fail
-        uses: actions/checkout@c57f932d5d44badedba05cf774dcb808347f6944
+        uses: actions/checkout@main
         with:
           persist-credentials: false
           ref: ${{ fromJSON(inputs.pullRequestJSON).merge_commit_sha }}
