@@ -1,4 +1,4 @@
-name: Pull request labeler
+name: repro workflow
 
 on:
   pull_request_target:
