@@ -37,7 +37,7 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
           allow-unsafe-pr-checkout: true
       - name: expected to fail
-        uses: actions/checkout@main
+        uses: actions/checkout@011c9c50dd621281dae1133f716823da4b0720e3
         with:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.sha }}
@@ -57,7 +57,7 @@ jobs:
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           allow-unsafe-pr-checkout: true
       - name: expected to fail
-        uses: actions/checkout@main
+        uses: actions/checkout@011c9c50dd621281dae1133f716823da4b0720e3
         with:
           ref: ${{ github.event.pull_request.head.ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
@@ -75,7 +75,7 @@ jobs:
           ref: ${{ inputs.branchName }}
           allow-unsafe-pr-checkout: true
       - name: expected to fail
-        uses: actions/checkout@main
+        uses: actions/checkout@011c9c50dd621281dae1133f716823da4b0720e3
         with:
           ref: ${{ inputs.branchName }}
 
@@ -94,7 +94,7 @@ jobs:
           ref: ${{ fromJSON(inputs.pullRequestJSON).merge_commit_sha }}
           allow-unsafe-pr-checkout: true
       - name: expected to fail
-        uses: actions/checkout@main
+        uses: actions/checkout@011c9c50dd621281dae1133f716823da4b0720e3
         with:
           persist-credentials: false
           ref: ${{ fromJSON(inputs.pullRequestJSON).merge_commit_sha }}
